@@ -1,0 +1,17 @@
+Leetcode Bank (LCB) helps its coders in making virtual payments. Our bank records all transactions in the table Transaction, we want to find out the current balance of all users and check whether they have breached their credit limit (If their current credit is less than 0).
+
+Write an SQL query to report.
+
+user_id,
+user_name,
+credit, current balance after performing transactions, and
+credit_limit_breached, check credit_limit ("Yes" or "No")
+
+
+
+with cte as
+(select user_id, user_name, credit, sum(case when user_id = paid_by then -amount else amount end)new_amount from users u
+left join transactions t on u.user_id = t.paid_by or u.user_id = t.paid_to
+group by user_id, user_name, credit)
+
+select user_id, user_name,isnull((credit+new_amount),credit)credit, (case when (credit+new_amount) <0 then 'Yes' else 'No' end)credit_limit_breached  from cte 
