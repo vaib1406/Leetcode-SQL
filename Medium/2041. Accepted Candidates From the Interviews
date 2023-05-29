@@ -1,0 +1,8 @@
+Write an SQL query to report the IDs of the candidates who have at least two years of experience and the sum of the score of their interview rounds is strictly greater than 15.
+
+
+select candidate_id from Candidates c 
+join rounds r on c.interview_id = r.interview_id 
+where years_of_exp >=2
+group by candidate_id 
+having sum(score)>15
