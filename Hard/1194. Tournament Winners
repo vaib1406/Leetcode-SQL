@@ -1,0 +1,19 @@
+The winner in each group is the player who scored the maximum total points within the group. In the case of a tie, the lowest player_id wins.
+
+Write an SQL query to find the winner in each group.
+
+
+WITH CTE AS
+(SELECT first_player player_id, first_score score
+FROM matches
+UNION ALL
+SELECT second_player player_id, second_score score
+FROM matches)
+
+,CTE_1 AS
+(SELECT player_id, SUM(score) score
+FROM CTE
+GROUP BY player_id)
+
+SELECT DISTINCT group_id ,FIRST_VALUE(c.player_id) OVER(partition by group_id ORDER BY score DESC, c.player_id) player_id
+from cte_1 c LEFT JOIN players p ON c.player_id = p.player_id
