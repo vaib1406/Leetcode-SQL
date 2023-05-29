@@ -1,0 +1,15 @@
+A second-degree follower is a user who:
+
+follows at least one user, and
+is followed by at least one user.
+Write an SQL query to report the second-degree users and the number of their followers.
+
+Return the result table ordered by follower in alphabetical order.
+
+
+select
+  followee as follower,
+  count(distinct follower) as num
+from follow
+where followee in (select distinct follower from follow)
+group by followee
