@@ -1,0 +1,15 @@
+Write an SQL query to rearrange the Genders table such that the rows alternate between 'female', 'other', and 'male' in order. The table should be rearranged such that the IDs of each gender are sorted in ascending order.
+
+
+SELECT
+	user_id,
+	gender
+FROM
+	genders
+ORDER BY
+	(RANK() OVER(PARTITION BY gender ORDER BY user_id ASC) * 3) +
+	CASE
+		WHEN gender = 'female' THEN 0
+		WHEN gender = 'other' THEN 1
+		WHEN gender = 'male' THEN 2
+	END ASC
