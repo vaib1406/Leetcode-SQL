@@ -1,0 +1,16 @@
+Employees can belong to multiple departments. When the employee joins other departments, they need to decide which department is their primary department. 
+Note that when an employee belongs to only one department, their primary column is 'N'.
+
+Write an SQL query to report all the employees with their primary department. For employees who belong to one department, report their only department.
+
+with cte as
+(select employee_id from employee
+group by employee_id
+having count(*)=1)
+
+select e.employee_id,e.department_id from cte c
+join employee e on c.employee_id = e.employee_id
+union
+select employee_id,department_id from employee
+where primary_flag = 'Y'
+
