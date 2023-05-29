@@ -1,0 +1,15 @@
+A school has students from Asia, Europe, and America.
+
+Write an SQL query to pivot the continent column in the Student table so that each name is sorted alphabetically and displayed underneath its corresponding continent. The output headers should be America, Asia, and Europe, respectively.
+
+The test cases are generated so that the student number from America is not less than either Asia or Europe.
+
+
+
+with cte as
+(select *, ROW_NUMBER() over (partition by continent order by name)rn from student)
+
+(select min(case when continent = 'America' then name end)America, 
+min(case when continent = 'Asia' then name end)Asia, 
+min(case when continent = 'Europe' then name end)Europe from cte
+group by rn)
