@@ -1,0 +1,13 @@
+Write an SQL query that reports the most experienced employees in each project. In case of a tie, report all employees with the maximum number of experience years.
+
+Return the result table in any order.
+
+
+select a.project_id, a.employee_id FROM
+(
+SELECT p.project_id, e.employee_id,
+DENSE_RANK()OVER(Partition by p.project_id ORDER BY e.experience_years desc)as rnk
+FROM project p JOIN employee e
+ON p.employee_id = e.employee_id
+) a
+ where rnk = 1
