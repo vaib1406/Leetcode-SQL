@@ -1,0 +1,23 @@
+Write an SQL query to report the number of grand slam tournaments won by each player. Do not include the players who did not win any tournament.
+
+with cte as
+((select wimbledon, count(*)w_count
+from Championships
+group by wimbledon)
+union all
+(select Fr_open, count(*)f_count
+from Championships
+group by Fr_open)
+union all
+(select US_open, count(*)u_count
+from Championships
+group by US_open )
+union all
+(select Au_open, count(*)au_count
+from Championships
+group by Au_open))
+
+
+select wimbledon as player_id, player_name, sum(w_count)grand_slams_count from cte c 
+join players p on c.wimbledon = p.player_id
+group by wimbledon,player_name
