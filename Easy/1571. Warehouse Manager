@@ -1,0 +1,6 @@
+Write an SQL query to report the number of cubic feet of volume the inventory occupies in each warehouse.
+
+
+select name warehouse_name, sum(units*width*length*height)volume from warehouse w
+left join products p on w.product_id = p.product_id
+group by name 
