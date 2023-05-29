@@ -1,0 +1,21 @@
+Write an SQL query to find for each month and country: the number of approved transactions and their total amount, the number of chargebacks, and their total amount.
+
+Note: In your query, given the month and country, ignore rows with all zeros.
+
+
+with cte as(
+    select * from transactions WHERE state = 'approved'
+    union all
+    select trans_id as id, tns.country as country, 'back' as state, 
+    tns.amount as amount, cb.trans_date as trans_date
+    from Chargebacks cb join Transactions tns on 
+    cb.trans_id = tns.id
+)
+select distinct left(trans_date, 7) as month, country, 
+sum(case when state='approved' then 1 else 0 end) as approved_count,
+sum(case when state='approved' then amount else 0 end) as approved_amount,
+sum(case when state='back' then 1 else 0 end) as chargeback_count,
+sum(case when state='back' then amount else 0 end) as chargeback_amount
+from cte
+group by left(trans_date, 7), country
+order by left(trans_date, 7)
