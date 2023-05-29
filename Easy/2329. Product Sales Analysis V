@@ -1,0 +1,10 @@
+Write an SQL query that reports the spending of each user.
+
+Return the resulting table ordered by spending in descending order. In case of a tie, order them by user_id in ascending order.
+
+
+
+select user_id, sum(quantity*price)spending from sales s
+left join product p on s.product_id = p.product_id
+group by user_id
+order by sum(quantity*price) desc, user_id
