@@ -1,0 +1,13 @@
+Write an SQL query that reports for each user the product id on which the user spent the most money. In case the same user spent the most money on two or more products, report all of them
+
+
+with cte as
+(select user_id, s.product_id, sum(price*quantity)spent from sales s
+join product p on s.product_id = p.product_id
+group by user_id, s.product_id)
+, cte1 as
+(select *, dense_rank() over (partition by user_id order by spent desc)dr from cte)
+
+select user_id, product_id from cte1
+where dr = 1
+
