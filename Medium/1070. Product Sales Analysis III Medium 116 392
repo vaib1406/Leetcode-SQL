@@ -1,0 +1,9 @@
+Write an SQL query that selects the product id, year, quantity, and price for the first year of every product sold.
+
+with cte as
+(select s.product_id , min(year)first_year from sales s
+left join Product p on s.product_id  = p.product_id 
+group by s.product_id)
+
+select s.product_id, s.year as first_year, quantity,price from sales s
+join cte c on s.year = c.first_year and s.product_id = c.product_id
