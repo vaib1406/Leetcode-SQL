@@ -1,0 +1,18 @@
+Write an SQL query to find the customer_number for the customer who has placed the largest number of orders.
+The test cases are generated so that exactly one customer will have placed more orders than any other customer
+
+1st solution:-
+
+SELECT TOP 1 customer_number 
+FROM Orders
+GROUP BY customer_number
+ORDER BY count(order_number) DESC;
+
+2nd solution:-
+
+with cte as(select customer_number, count(*)cnt
+from orders
+group by customer_number)
+
+select customer_number from cte
+where cnt = (select max(cnt) from cte)
