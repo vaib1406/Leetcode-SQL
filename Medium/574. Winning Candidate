@@ -1,0 +1,10 @@
+Write an SQL query to report the name of the winning candidate (i.e., the candidate who got the largest number of votes).
+The test cases are generated so that exactly one candidate wins the elections.
+
+with cte as
+(select name, count(*)vote from candidate c
+join vote v on c.id = v.candidateId
+group by name)
+
+select name from cte
+where vote = (select max(vote) from cte)
