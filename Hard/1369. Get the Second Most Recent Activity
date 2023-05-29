@@ -1,0 +1,15 @@
+Write an SQL query to show the second most recent activity of each user.
+
+If the user only has one activity, return that one. A user cannot perform more than one activity at the same time.
+
+
+WITH myCTE as (
+    SELECT username, activity, startDate, endDate
+    , ROW_NUMBER() OVER (PARTITION BY username ORDER BY startDate) as activity_ordinal
+    , COUNT(*) OVER (PARTITION BY username) as total_activities
+    FROM UserActivity
+)
+SELECT username, activity, startDate, endDate 
+FROM myCTE 
+WHERE activity_ordinal = 2 
+OR total_activities = 1
