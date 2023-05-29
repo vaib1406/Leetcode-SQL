@@ -1,0 +1,9 @@
+Write an SQL query to report the managers with at least five direct reports.
+
+with cte as
+(select managerId , count(*)as cnt_manager from employee 
+group by managerId)
+
+select e.name from cte c 
+join employee e on c.managerId = e.id
+where cnt_manager > = 5
