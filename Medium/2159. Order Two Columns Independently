@@ -1,0 +1,15 @@
+Write an SQL query to independently:
+
+order first_col in ascending order.
+order second_col in descending order.
+
+
+with cte as
+(select first_col,second_col,
+ rwn1= row_number() over (order by first_col asc),
+   rwn2= row_number() over (order by second_col desc)
+    from Data)
+
+select c1.first_col, c2.second_col from cte c1
+  join cte c2 on c1.rwn1 = c2.rwn2
+    order by c1.rwn1
