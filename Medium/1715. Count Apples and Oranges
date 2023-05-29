@@ -1,0 +1,5 @@
+Write an SQL query to count the number of apples and oranges in all the boxes. If a box contains a chest, you should also include the number of apples and oranges it has.
+
+
+select sum(b.apple_count)+ isnull(sum(c.apple_count), 0)apple_count, sum(b.orange_count)+isnull(sum(c.orange_count),0)orange_count from boxes b
+left join chests c on b.chest_id = c.chest_id 
