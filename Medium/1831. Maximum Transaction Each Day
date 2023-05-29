@@ -1,0 +1,12 @@
+Write an SQL query to report the IDs of the transactions with the maximum amount on their respective day. If in one day there are multiple such transactions, return all of them.
+
+Return the result table ordered by transaction_id in ascending order.
+
+
+with cte as
+(select  transaction_id ,dense_rank() over (partition by cast(day as date) order by amount desc)amt from transactions)
+
+select transaction_id from cte
+where amt = 1
+order by transaction_id
+
