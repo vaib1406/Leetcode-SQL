@@ -1,0 +1,5 @@
+Write an SQL query that reports the best seller by total sales price, If there is a tie, report them all.
+
+select TOP 1 WITH TIES seller_id from sales 
+group by seller_id
+order by sum(price)desc
