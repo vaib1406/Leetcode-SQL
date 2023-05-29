@@ -1,0 +1,8 @@
+Write an SQL query that reports all the projects that have the most employees.
+
+with cte as
+(select project_id, count(*)employees from project p 
+group by project_id)
+
+select project_id from cte 
+where employees = (select max(employees) from cte)
