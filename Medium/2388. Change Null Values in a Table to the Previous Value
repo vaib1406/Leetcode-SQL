@@ -1,0 +1,11 @@
+Write an SQL query to replace the null values of drink with the name of the drink of the previous row that is not null. It is guaranteed that the drink of the first row of the table is not null.
+
+
+with cte as
+(select *, count(drink) over (order by di)as cnt
+from 
+(select *, row_number() over (order by (select (1)))di from coffeeshop)t)
+
+
+
+select id, FIRST_VALUE(drink) over (partition by cnt order by di)drink from cte
