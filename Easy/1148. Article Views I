@@ -1,0 +1,7 @@
+Write an SQL query to find all the authors that viewed at least one of their own articles.
+
+(select *, (case when author_id = viewer_id then 1 else 0 end)dr
+from views)
+
+select distinct author_id id from cte 
+where dr>= 1
