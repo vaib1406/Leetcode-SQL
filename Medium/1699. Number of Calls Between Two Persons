@@ -1,0 +1,11 @@
+Write an SQL query to report the number of calls and the total call duration between each pair of distinct persons (person1, person2) where person1 < person2.
+
+
+with cte as
+(select *, sum(duration) over (partition by from_id * to_id)total_duration,
+count(*) over (partition by from_id * to_id) call_count,
+dense_rank() over (partition by from_id * to_id order by from_id)dr
+ from calls)
+
+select distinct from_id person1, to_id person2, call_count, total_duration  from cte 
+where dr = 1
