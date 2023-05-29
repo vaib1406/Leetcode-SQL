@@ -1,0 +1,9 @@
+Write an SQL query to find all the people who viewed more than one article on the same date.
+
+Return the result table sorted by id in ascending order.
+
+
+select distinct viewer_id as id from views 
+group by view_date, viewer_id
+having count(distinct article_id) > 1
+order by viewer_id
