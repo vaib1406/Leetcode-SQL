@@ -1,0 +1,12 @@
+Write an SQL query to report the fraction of players that logged in again on the day after the day they first logged in, rounded to 2 decimal places. 
+In other words, you need to count the number of players that logged in for at least two consecutive days starting from their first login date, 
+then divide that number by the total number of players.
+
+with cte as
+(select player_id, min(event_date)min_event_date from activity
+group by player_id)
+
+select round(count(c.player_id)*1.0/(select count(distinct player_id) from activity), 2)fraction
+from cte c
+join activity a on c.player_id = a.player_id 
+and datediff(day, min_event_date, event_date) = 1
