@@ -1,0 +1,17 @@
+Write an SQL query to find the people who have the most friends and the most friends number.
+
+The test cases are generated so that only one person has the most friends.
+
+
+with cte as
+(select requester_id from RequestAccepted 
+union all
+select accepter_id from RequestAccepted) 
+
+,cte1 as
+(select requester_id as id, count(*)num from cte
+group by requester_id)
+
+
+select * from cte1
+where num = (select max(num) from cte1)
