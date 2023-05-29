@@ -1,0 +1,5 @@
+Write an SQL query that reports the total quantity sold for every product id.
+
+select s.product_id , sum(quantity)total_quantity from sales s
+left join product p on s.product_id = p.product_id
+group by s.product_id
