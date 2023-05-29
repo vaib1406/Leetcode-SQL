@@ -1,0 +1,22 @@
+Write an SQL query to report the name and the mail of all interview candidates. A user is an interview candidate if at least one of these two conditions is true:
+
+The user won any medal in three or more consecutive contests.
+The user won the gold medal in three or more different contests (not necessarily consecutive).
+
+
+
+with cte as
+(select contest_id,mail,name, (case when user_id in (gold_medal, silver_medal ,bronze_medal) then 1 else 0
+end) as pp
+from contests, users)
+
+select distinct c1.name, c1.mail from cte c1
+join cte c2 on c1.contest_id+ 1 = c2.contest_id and c1.mail = c2.mail
+join cte c3 on c1.contest_id + 2 = c3.contest_id and c1.mail = c3.mail
+where c1.pp + c2.pp = 2 and c1.pp+ c3.pp = 2
+union 
+select distinct name,mail from contests c
+join users u on c.gold_medal = u.user_id
+group by gold_medal,name, mail
+having count(*)> =3
+
