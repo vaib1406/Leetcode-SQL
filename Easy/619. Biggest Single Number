@@ -1,0 +1,9 @@
+A single number is a number that appeared only once in the MyNumbers table.
+Write an SQL query to report the largest single number. If there is no single number, report null.
+
+with cte as
+(select num from mynumbers
+group by num
+having count(*)=1)
+
+select isnull(max(num), null)num  from cte
