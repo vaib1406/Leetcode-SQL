@@ -1,0 +1,24 @@
+ Write an SQL query to report the comparison result (higher/lower/same) of the average salary of employees in a department to the company's average salary.
+
+with avg_company_salary as
+(select s.employee_id, department_id, amount, pay_date
+  ,avg(amount) over (partition by pay_date)avg_company_salary
+    from salary s
+      join employee e on s.employee_id = e.employee_id)
+
+,avg_dept_salary as
+(select department_id, pay_date
+ ,avg(amount) over 
+  (partition by pay_date, department_id)avg_dept_salary,
+    cast(avg_company_salary as float)avg_company_salary from avg_company_salary)
+
+select distinct 
+ concat(datepart(year, pay_date),'-', RIGHT(CONCAT('0', MONTH([pay_date])), 2))
+ pay_month,  
+  department_id,
+  (case 
+    when avg_dept_salary > avg_company_salary then 'higher'
+     when avg_dept_salary < avg_company_salary then 'lower'
+      else 'same' end)comparison
+         from avg_dept_salary
+
