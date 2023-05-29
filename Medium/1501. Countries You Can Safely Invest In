@@ -1,0 +1,16 @@
+A telecommunications company wants to invest in new countries. The company intends to invest in the countries where the average call duration of the calls in this country is strictly greater than the global average call duration.
+
+Write an SQL query to find the countries where this company can invest.
+
+
+with cte as
+(select left(phone_number, charindex('-', phone_number)-1)country_code, duration from calls ca
+join person p on ca.caller_id = p.id or ca.callee_id = p.id)
+
+,cte1 as
+(select co.name, avg(duration) over (partition by co.name)avg_duration from cte ct
+join country co on ct.country_code = co.country_code)
+
+select distinct name as country  from cte1
+where avg_duration> (select avg(duration)global_avg_duration from person p
+                      join calls c on p.id = c.caller_id or p.id = c.callee_id) 
