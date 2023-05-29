@@ -1,0 +1,9 @@
+Write an SQL query to find the percentage of the users registered in each contest rounded to two decimals.
+
+Return the result table ordered by percentage in descending order. In case of a tie, order it by contest_id in ascending order.
+
+
+select contest_id, round(count(*)*1.0/(select count(*)unique_users from users)*100, 2)percentage from users u 
+right join register r on u.user_id = r.user_id
+group by contest_id
+order by round(count(*)*1.0/(select count(*)unique_users from users)*100, 2) desc, contest_id asc
