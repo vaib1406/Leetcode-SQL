@@ -1,0 +1,10 @@
+ Write an SQL query to display the records with three or more rows with consecutive id's, and the number of people is greater than or equal to 100 for each.
+
+Return the result table ordered by visit_date in ascending order.
+
+with cte as
+(select *, id-row_number() over (order by id)consecutive_num from stadium
+where people >= 100)
+
+select id, visit_date, people from cte 
+where consecutive_num in (select  consecutive_num from cte group by consecutive_num having count(*) >= 3)
