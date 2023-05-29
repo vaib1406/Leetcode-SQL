@@ -1,0 +1,23 @@
+A company wants to hire new employees. The budget of the company for the salaries is $70000. The company's criteria for hiring are:
+
+Keep hiring the senior with the smallest salary until you cannot hire any more seniors.
+Use the remaining budget to hire the junior with the smallest salary.
+Keep hiring the junior with the smallest salary until you cannot hire any more juniors.
+Write an SQL query to find the ids of seniors and juniors hired under the mentioned criteria.
+
+
+
+with cte as
+(select *, sum(salary) over (partition by experience order by salary rows 
+between unbounded preceding and current row)running_total
+from Candidates
+)
+
+select isnull(employee_id,0)employee_id from cte
+where running_total <= '70000' and experience = 'senior'
+union 
+select isnull(employee_id,0)employee_id from cte
+where experience = 'junior' and 
+(select isnull(max(running_total),0) from cte where running_total <= '70000' and experience = 'senior')
++running_total<= '70000'
+
