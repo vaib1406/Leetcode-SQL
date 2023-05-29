@@ -1,0 +1,12 @@
+Write an SQL query to find for each month and country, the number of transactions and their total amount, the number of approved transactions and their total amount.
+
+
+with cte as
+(select concat(year(trans_date),'-', right(concat('0', month(trans_date)), 2))month, country 
+  ,state, amount 
+    from Transactions)
+
+select month, country, count(*)trans_count, sum(case when state = 'approved' then 1 else 0 end)approved_count, sum(amount)trans_total_amount, sum(case when state = 'approved' then 
+amount else 0 end)approved_total_amount  
+ from cte 
+group by month, country
