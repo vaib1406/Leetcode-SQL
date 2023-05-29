@@ -1,0 +1,14 @@
+Write an SQL query to find the names of all the activities with neither the maximum nor the minimum number of participants.
+
+Each activity in the Activities table is performed by any person in the table Friends.
+
+
+
+with cte as
+(select activity, count(activity)cnt from friends 
+group by activity)
+select activity from cte
+where cnt not in (
+(select max(cnt)cnt from cte
+union
+select min(cnt)cnt from cte))
