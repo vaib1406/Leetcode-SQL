@@ -1,0 +1,8 @@
+Write an SQL query to find the team size of each of the employees.
+
+with cte as
+(select team_id, count(*)team_size from employee 
+group by team_id)
+
+select e.employee_id,team_size from cte c 
+join employee e on c.team_id = e.team_id
