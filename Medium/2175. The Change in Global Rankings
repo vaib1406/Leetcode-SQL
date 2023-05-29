@@ -1,0 +1,17 @@
+The global ranking of a national team is its rank after sorting all the teams by their points in descending order. If two teams have the same points, we break the tie by sorting them by their name in lexicographical order.
+
+The points of each national team should be updated based on its corresponding points_change value.
+
+Write an SQL query to calculate the change in the global rankings after updating each team's points.
+
+
+with before_rank as
+(select team_id, name, points, dense_rank() over (order by points desc,name)b_rnk from teampoints)
+
+,after_rank as
+(select t.team_id, name, (points+points_change)updated_points
+ from teampoints t join pointschange p on t.team_id = p.team_id 
+)
+select ar.team_id,ar.name, (br.b_rnk-dense_rank() over (order by updated_points desc, ar.name))rank_diff 
+from after_rank ar
+join before_rank br on ar.team_id = br.team_id
