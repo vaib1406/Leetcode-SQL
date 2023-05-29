@@ -1,0 +1,11 @@
+Write an SQL query to report the number of experiments done on each of the three platforms for each of the three given experiments. 
+Notice that all the pairs of (platform, experiment) should be included in the output including the pairs with zero experiments.
+
+
+
+select pm platform, name experiment_name, count(experiment_id) num_experiments
+from (values('Android'), ('IOS'), ('Web')) p(pm) cross join
+(values('Reading'), ('Sports'), ('Programming')) e(name)
+left join experiments on p.pm = platform and e.name = experiment_name
+group by pm, name
+
