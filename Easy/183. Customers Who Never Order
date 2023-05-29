@@ -1,0 +1,4 @@
+Write an SQL query to report all customers who never order anything.
+
+select name customers from customers c1
+where id not in (select customerId from orders)
