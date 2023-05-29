@@ -1,0 +1,29 @@
+Write an SQL query to:
+
+Find the name of the user who has rated the greatest number of movies. In case of a tie, return the lexicographically smaller user name.
+Find the movie name with the highest average rating in February 2020. In case of a tie, return the lexicographically smaller movie name.
+
+
+with cte1 as
+(select name as results, count(distinct movie_id)as rated_movies
+from movierating mr
+join users u on mr.user_id = u.user_id
+group by name)
+
+,cte2 as
+(select title results, (1.0*sum(rating)/count(*)) as avg_rate
+from movierating mr
+join movies m on mr.movie_id = m.movie_id
+where created_at between '2020-02-01' and '2020-02-28'
+group by title
+)
+
+select * from
+(select top 1 results from 
+(select results, rated_movies  from cte1)t
+order by rated_movies desc, results)q
+union all
+select * from
+(select top 1 results from 
+(select results, avg_rate from cte2)b
+order by avg_rate desc, results)a
