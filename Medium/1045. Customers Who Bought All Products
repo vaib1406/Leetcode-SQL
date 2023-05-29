@@ -1,0 +1,9 @@
+Write an SQL query to report the customer ids from the Customer table that bought all the products in the Product table.
+Return the result table in any order.
+
+
+SELECT c.customer_id FROM  Customer c
+GROUP BY
+    c.customer_id
+HAVING
+    count(DISTINCT product_key) = (SELECT count(*) FROM Product);
