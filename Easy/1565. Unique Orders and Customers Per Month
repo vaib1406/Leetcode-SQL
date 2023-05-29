@@ -1,0 +1,6 @@
+Write an SQL query to find the number of unique orders and the number of unique customers with invoices > $20 for each different month.
+
+select left(order_date, 7)month, count(order_id)order_count, 
+count(distinct customer_id)customer_count from orders
+where invoice>20 
+group by left(order_date, 7)
