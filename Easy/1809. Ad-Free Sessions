@@ -1,0 +1,9 @@
+Write an SQL query to report all the sessions that did not get shown any ads.
+
+with cte as
+(select session_id from ads a
+join Playback p on a.customer_id = p.customer_id
+where timestamp between start_time and end_time)
+
+select session_id from playback
+where session_id not in (select session_id from cte)
