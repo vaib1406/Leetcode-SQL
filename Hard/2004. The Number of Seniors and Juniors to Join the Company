@@ -1,0 +1,23 @@
+A company wants to hire new employees. The budget of the company for the salaries is $70000. The company's criteria for hiring are:
+
+Hiring the largest number of seniors.
+After hiring the maximum number of seniors, use the remaining budget to hire the largest number of juniors.
+Write an SQL query to find the number of seniors and juniors hired under the mentioned criteria.
+
+
+with cte as
+(select * ,row_number() over (partition by experience order by salary)rn
+from Candidates
+)
+, cte1 as
+(select *, sum(salary) over (partition by experience order by rn)rn1
+from cte 
+)
+
+
+select 'Senior' as experience, isnull(count(employee_id),0) as accepted_candidates from cte1
+where experience = 'Senior' and rn1<='70000'
+union 
+select 'Junior' as experience, isnull(count(employee_id),0) as accepted_candidates from cte1
+where experience = 'junior' and (select isnull(max(rn1),0) from cte1 where experience = 'Senior' 
+                                              and rn1<='70000')+rn1<='70000'
