@@ -1,0 +1,11 @@
+ Write an SQL query to report the day that has the maximum recorded degree in each city. If the maximum degree was recorded for the same city multiple times, return the earliest day among them.
+
+Return the result table ordered by city_id in ascending order.
+
+
+with cte as
+(select *, dense_rank() over (partition by city_id order by degree desc, day)dr
+from weather)
+
+select city_id, day, degree from cte
+where dr = 1
