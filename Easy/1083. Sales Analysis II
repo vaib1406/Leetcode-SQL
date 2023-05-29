@@ -1,0 +1,7 @@
+Write an SQL query that reports the buyers who have bought S8 but not iPhone. Note that S8 and iPhone are products present in the Product table.
+
+select buyer_id from sales s
+join Product p on s.product_id = p.product_id 
+group by buyer_id 
+having sum(case when product_name = 'S8' then 1 else 0 end) > 0 and 
+sum(case when product_name = 'iphone' then 1 else 0 end) = 0 
