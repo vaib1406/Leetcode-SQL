@@ -1,0 +1,11 @@
+Write an SQL query to report:
+
+the number of the tasks that were submitted during the weekend (Saturday, Sunday) as weekend_cnt, and
+the number of the tasks that were submitted during the working days as working_cnt.
+
+
+
+select count(case when datename(weekday, submit_date) in('Saturday' , 'Sunday') then 1
+ end)weekend_cnt, 
+  count(case when datename(weekday, submit_date) not in ('Saturday' , 'Sunday') then 1 end)working_cnt 
+    from tasks
