@@ -1,0 +1,7 @@
+The answer rate for a question is the number of times a user answered the question by the number of times a user showed the question.
+Write an SQL query to report the question that has the highest answer rate. If multiple questions have the same maximum answer rate, report the question with the smallest question_id.
+
+select Top 1 question_id as survey_log
+from surveylog
+group by question_id
+order by count(answer_id) / nullif(sum(case when action='show' then 1 else 0 end),0) desc, count(answer_id) desc
