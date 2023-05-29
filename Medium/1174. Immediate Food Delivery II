@@ -1,0 +1,17 @@
+If the customer's preferred delivery date is the same as the order date, then the order is called immediate; otherwise, it is called scheduled.
+
+The first order of a customer is the order with the earliest order date that the customer made. It is guaranteed that a customer has precisely one first order.
+
+Write an SQL query to find the percentage of immediate orders in the first orders of all customers, rounded to 2 decimal places.
+
+
+
+with cte as
+(select customer_id, min(order_date)order_date from delivery
+group by customer_id)
+
+select round(100*sum(case when c.order_date = d.customer_pref_delivery_date then 
+       1 else 0 end)*1.0/count(*),2)immediate_percentage
+       from cte c
+          join Delivery d on c.customer_id = d.customer_id 
+            and c.order_date = d.order_date
