@@ -1,0 +1,17 @@
+We define query quality as:
+The average of the ratio between query rating and its position.
+We also define poor query percentage as:
+The percentage of all queries with rating less than 3.
+
+Write an SQL query to find each query_name, the quality and poor_query_percentage.
+Both quality and poor_query_percentage should be rounded to 2 decimal places.
+
+
+with cte as
+(select query_name, round((sum(1.0*rating/position))/count(*),2)quality, count(*)total_cnt
+from queries
+group by query_name)
+
+select q.query_name,quality, round((1.0*sum(case when rating < 3 then 1 else 0 end)/total_cnt*100),2)poor_query_percentage from Queries q
+join cte c on q.query_name = c.query_name
+group by q.query_name,quality,total_cnt
