@@ -1,0 +1,10 @@
+Write an SQL query to convert each date in Days into a string formatted as "day_name, month_name day, year".
+
+
+1st Solution:-
+
+select concat(datename(weekday, day),', ', datename(month, day),' ', datename(day, day),', ' ,datename(year, day))day 
+ from days
+
+2nd Solution:-
+select format(day,'D', 'en-US' ) day from Days
