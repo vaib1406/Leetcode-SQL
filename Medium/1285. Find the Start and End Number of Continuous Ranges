@@ -1,0 +1,12 @@
+Write an SQL query to find the start and end number of continuous ranges in the table Logs.
+
+Return the result table ordered by start_id.
+
+
+with cte as
+(select log_id-(row_number() over (order by (select null)))id, log_id from logs)
+
+
+select min(log_id)start_id ,max(log_id)end_id  from cte
+group by id
+
