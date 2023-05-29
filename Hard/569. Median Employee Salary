@@ -1,0 +1,12 @@
+Write an SQL query to find the rows that contain the median salary of each company. While calculating the median, when you sort the salaries of the company, break the ties by id.
+
+
+with cte as
+(select id, company, salary,
+dense_rank() over (partition by company order by salary,id)rn from employee)
+
+, cte1 as
+(select *, row_number() over (partition by company order by rn desc)rn1 from cte)
+
+select id, company, salary from cte1
+where rn-rn1 = 1 or rn-rn1 = -1 or rn-rn1 = 0
