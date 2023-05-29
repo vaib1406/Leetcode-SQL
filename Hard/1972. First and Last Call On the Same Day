@@ -1,0 +1,32 @@
+Write an SQL query to report the IDs of the users whose first and last calls on any day were with the same person. Calls are counted regardless of being the caller or the recipient.
+
+
+
+with call_cte as
+(SELECT caller_id, recipient_id, call_time FROM calls
+ UNION ALL
+SELECT recipient_id , caller_id, call_time FROM calls)
+
+, call_rankings as
+(SELECT
+caller_id
+, recipient_id
+, RANK() OVER(PARTITION BY caller_id, LEFT(call_time,11) ORDER BY call_time ASC) as rnk_first
+, RANK() OVER(PARTITION BY caller_id, LEFT(call_time,11) ORDER BY call_time DESC) as rnk_last
+, LEFT(call_time,11) as day
+FROM
+call_cte)
+
+SELECT DISTINCT
+    caller_id as user_id
+FROM
+    call_rankings
+WHERE
+    rnk_first = 1
+    OR
+    rnk_last = 1
+GROUP BY
+    caller_id
+    , day
+HAVING
+    COUNT(DISTINCT(recipient_id)) = 1
