@@ -1,0 +1,21 @@
+A company is running Ads and wants to calculate the performance of each Ad.
+Performance of the Ad is measured using Click-Through Rate (CTR) where:
+
+Write an SQL query to find the ctr of each Ad. Round ctr to two decimal points.
+
+Return the result table ordered by ctr in descending order and by ad_id in ascending order in case of a tie.
+
+with cte as
+(select ad_id, sum(case when action = 'clicked' then 1 else 0 end)click_count,
+sum(case when action = 'viewed' then 1 else 0 end)view_count
+from ads
+group by ad_id)
+
+
+select ad_id, isnull(round(100.00 * cte.click_count/nullif((cte.click_count + cte.view_count), 0), 2), 0) as 'ctr'
+from cte
+order by ctr desc, ad_id asc
+
+
+
+
