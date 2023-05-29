@@ -1,0 +1,4 @@
+Write an SQL query to show the unique ID of each user, If a user does not have a unique ID replace just show null.
+
+select (isnull(unique_id, null)) as unique_id, name from employees e
+left join EmployeeUNI eu on e.id = eu.id
