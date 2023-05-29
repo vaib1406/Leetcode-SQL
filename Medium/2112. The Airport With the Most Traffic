@@ -1,0 +1,14 @@
+Write an SQL query to report the ID of the airport with the most traffic. The airport with the most traffic is the airport that has the largest total number of flights that either departed from or arrived at the airport. If there is more than one airport with the most traffic, report them all.
+
+
+with cte as
+(select departure_airport,flights_count from flights
+union all
+select arrival_airport ,flights_count from flights)
+
+, cte2 as
+(select departure_airport ,sum(flights_count)total_flights from cte
+group by departure_airport)
+
+select  departure_airport  airport_id from cte2
+where total_flights = (select max(total_flights) from cte2)
