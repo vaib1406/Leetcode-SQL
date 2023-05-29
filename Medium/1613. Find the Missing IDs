@@ -1,0 +1,21 @@
+Write an SQL query to find the missing customer IDs. The missing IDs are ones that are not in the Customers table but are in the range between 1 and the maximum customer_id present in the table.
+
+Notice that the maximum customer_id will not exceed 100.
+
+Return the result table ordered by ids in ascending order.
+
+
+with cte_a as
+(
+select max(customer_id) max_id from customers
+)
+,cte_b as
+(
+select 1 min_id from customers --anchor query
+union all
+select b.min_id + 1 from cte_a a inner join cte_b b on -- recursive query
+b.min_id < a.max_id
+)
+select min_id as ids from cte_b
+except
+select customer_id from customers
