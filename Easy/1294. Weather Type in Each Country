@@ -1,0 +1,19 @@
+Write an SQL query to find the type of weather in each country for November 2019.
+
+The type of weather is:
+
+Cold if the average weather_state is less than or equal 15,
+Hot if the average weather_state is greater than or equal to 25, and
+Warm otherwise:-
+
+with cte as
+(select country_name, (1.0 *sum(weather_state)/count(*))avg_weather
+ from Countries c
+  join weather w on c.country_id  = w.country_id 
+   where day between '2019-11-01' and '2019-11-30'
+    group by country_name)
+
+select country_name,(case when avg_weather<=15 then 'Cold'
+ when avg_weather>=25 then 'Hot' 
+  else 'Warm' end)weather_type 
+   from cte 
