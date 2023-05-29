@@ -1,0 +1,14 @@
+Write an SQL query to report the respective department name and number of students majoring in each department for all departments in the Department table (even ones with no current students).
+
+Return the result table ordered by student_number in descending order. In case of a tie, order them by dept_name alphabetically.
+
+
+with cte as
+(select dept_name, (case when isnull(s.dept_id, 0) <> 0 then 1 else 0 end) as students
+from student s 
+right join Department d on s.dept_id = d.dept_id)
+
+
+select dept_name , sum(students)as student_number from cte 
+group by dept_name 
+order by sum(students) desc ,dept_name 
