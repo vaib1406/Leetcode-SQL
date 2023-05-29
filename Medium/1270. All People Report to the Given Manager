@@ -1,0 +1,10 @@
+Write an SQL query to find employee_id of all employees that directly or indirectly report their work to the head of the company.
+
+The indirect relation between managers will not exceed three managers as the company is small.
+
+
+select e1.employee_id from employees e1
+left join employees e2 on e1.manager_id =e2.employee_id
+left join employees e3 on e2.manager_id = e3.employee_id
+left join employees e4 on e3.manager_id = e4.employee_id
+where e1.employee_id!=1 and (e4.manager_id = 1 or e3.manager_id = 1 or e2.manager_id = 1 or e1.manager_id =1)
