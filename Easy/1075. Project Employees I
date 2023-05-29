@@ -1,0 +1,5 @@
+Write an SQL query that reports the average experience years of all the employees for each project, rounded to 2 digits.
+
+select project_id, round((sum(experience_years)*1.0) / count(p.employee_id), 2)average_years from project p 
+join employee e on p.employee_id = e.employee_id
+group by project_id
