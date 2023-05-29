@@ -1,0 +1,9 @@
+Write an SQL query to find the id and the name of all students who are enrolled in departments that no longer exist.
+
+with cte as
+(select s.department_id from students s
+except 
+select d.id from departments d)
+
+select s1.id, s1.name from students s1
+join cte c on s1.department_id = c.department_id  
