@@ -1,0 +1,23 @@
+You are the business owner and would like to obtain a sales report for category items and the day of the week.
+
+Write an SQL query to report how many units in each category have been ordered on each day of the week.
+
+Return the result table ordered by category.
+
+
+with cte as
+(select 
+item_category, datename(weekday, order_date)week_day, sum(quantity)total
+from orders o 
+right join items i on o.item_id = i.item_id
+group by item_category, datename(weekday, order_date))
+
+select item_category CATEGORY, max(case when week_day = 'Monday' then total else 0 end)MONDAY,
+max(case when week_day = 'Tuesday' then total else 0 end)TUESDAY,
+max(case when week_day = 'Wednesday' then total else 0 end)WEDNESDAY,
+max(case when week_day = 'Thursday' then total else 0 end)THURSDAY,
+max(case when week_day = 'Friday' then total else 0 end)FRIDAY,
+max(case when week_day = 'Saturday' then total else 0 end)SATURDAY,
+max(case when week_day = 'Sunday' then total else 0 end)SUNDAY
+from cte 
+group by item_category 
