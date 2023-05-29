@@ -1,0 +1,12 @@
+Write an SQL query to report the names of all sellers who did not make any sales in 2020.
+Return the result table ordered by seller_name in ascending order.
+
+
+with cte as
+(select seller_name from orders o
+join seller s on o.seller_id = s.seller_id
+where datepart(year, sale_date) = '2020')
+
+select seller_name from seller
+except 
+select seller_name from cte 
