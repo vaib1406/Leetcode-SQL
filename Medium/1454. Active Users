@@ -1,0 +1,16 @@
+Active users are those who logged in to their accounts for five or more consecutive days.
+
+Write an SQL query to find the id and the name of active users.
+
+Return the result table ordered by id.
+
+
+with cte as
+(select *, dense_rank() over (partition by id order by login_date desc) as ranks
+from logins)
+
+select distinct c.id ,a.name from cte c
+join accounts as a on c.id = a.id
+group by c.id, a.name, dateadd(day,c.ranks,c.login_date)
+having count( distinct c.login_date) >=5
+order by id
