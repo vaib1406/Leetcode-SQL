@@ -1,0 +1,14 @@
+Write an SQL query to report the customer_id and customer_name of customers who have spent at least $100 in each month of June and July 2020.
+Return the result table in any order.
+
+
+select c.customer_id, c.name
+from customers c
+join orders o
+on o.customer_id = c.customer_id
+join product p
+on p.product_id = o.product_id
+group by c.customer_id, c.name
+having
+SUM((case when left(order_date,7)='2020-06' then 1 else 0 end)*quantity*price)>=100 
+AND SUM((case when left(order_date,7)='2020-07' then 1 else 0 end)*quantity*price)>=100
