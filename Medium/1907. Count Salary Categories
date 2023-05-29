@@ -1,0 +1,25 @@
+Write an SQL query to report the number of bank accounts of each salary category. The salary categories are:
+
+"Low Salary": All the salaries strictly less than $20000.
+"Average Salary": All the salaries in the inclusive range [$20000, $50000].
+"High Salary": All the salaries strictly greater than $50000.
+The result table must contain all three categories. If there are no accounts in a category, then report 0.
+
+WITH cte AS (
+SELECT 'Low Salary' AS category
+UNION ALL
+SELECT 'Average Salary' AS category
+UNION ALL
+SELECT 'High Salary' AS category
+)
+
+SELECT
+c.category, COALESCE(COUNT(a.account_id),0) AS accounts_count
+FROM accounts a
+RIGHT JOIN cte c
+ON (CASE when a.income < 20000 THEN 'Low Salary'
+WHEN a.income BETWEEN 20000 AND 50000 THEN 'Average Salary'
+WHEN a.income > 50000 THEN 'High Salary'
+END
+) = c.category
+GROUP BY c.category
